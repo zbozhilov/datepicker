@@ -1,0 +1,141 @@
+.ststr-datepicker {
+    font-family: Roboto;
+    background-color: #fff;
+    border-radius: 24px;
+
+    &-dual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    &-calendar {
+        padding: 20px;
+        box-sizing: border-box;
+
+        &-header {
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+
+            &-label {
+                user-select: none;
+                font-size: 16px;
+                font-weight: 500;
+                text-align: center;
+            }
+
+            &-nav {
+                &-prev,
+                &-next {
+                    width: 30px;
+                    height: 30px;
+
+                    i {
+                        border-radius: 50%;
+                        width: 100%;
+                        text-align: center;
+                        font-size: 12px;
+                        line-height: 30px;
+                        cursor: pointer;
+
+                        &:hover {
+                            background-color: #ececec;
+                        }
+                    }
+                }
+            }
+
+            margin-bottom: 40px;
+        }
+
+        &-daylabels {
+            user-select: none;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+            margin-bottom: 10px;
+
+            &-label {
+                text-align: center;
+                font-weight: 500;
+                font-size: 12px;
+                line-height: 1;
+            }
+        }
+
+        &-dates {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        &-date {
+            aspect-ratio: 1/1;
+            user-select: none;
+
+            &-inner {
+                aspect-ratio: inherit;
+                box-sizing: border-box;
+            }
+
+            &-text {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                font-size: 14px;
+                line-height: 1;
+            }
+        }
+    }
+
+    &-disallow-expired {
+        .ststr-datepicker-calendar-date-expired {
+            opacity: 0.3;
+        }
+    }
+
+    &-disallow-future {
+        .ststr-datepicker-calendar-date-future {
+            opacity: 0.3;
+        }
+    }
+
+    .ststr-datepicker-calendar-date-today {
+        &:hover {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #ececec;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    &:not(&-disallow-expired) {
+        .ststr-datepicker-calendar-date-expired {
+            &:hover {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #ececec;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    &:not(&-disallow-future) {
+        .ststr-datepicker-calendar-date-future {
+            &:hover {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #ececec;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}

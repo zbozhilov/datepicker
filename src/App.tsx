@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import DatePicker from './DatePicker/DatePicker';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    return (
+        <div
+            className='App'
+            style={{ maxWidth: 700, margin: '100px auto' }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+            <DatePicker
+                dual={true}
+                minRange={'2024-07-01'}
+                maxRange={'2025-07-01'}
+                disallowExpired={true}
+                disallowFuture={false}
+                dayLabels={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
+                monthLabels={[
+                    'January',
+                    'February',
+                    'March',
+                    'April',
+                    'May',
+                    'June',
+                    'July',
+                    'August',
+                    'September',
+                    'October',
+                    'November',
+                    'December',
+                ]}
+            />
+        </div>
+    );
 }
 
 export default App;
