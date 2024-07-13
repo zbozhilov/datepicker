@@ -1,0 +1,50 @@
+$fontSize: 16px;
+$fontColor: #202020;
+$arrowBackgroundColor: #fff;
+$arrowTextColor: #202020;
+$arrowBackgroundColorHover: #ececec;
+$arrowTextColorHover: #202020;
+$arrowSize: 30px;
+$arrowFontSize: 12px;
+
+.ststr-datepicker-calendar-header {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+
+    &-label {
+        user-select: none;
+        font-size: $fontSize;
+        color: $fontColor;
+
+        font-weight: 500;
+        text-align: center;
+    }
+
+    &-nav {
+        &-prev,
+        &-next {
+            width: $arrowSize;
+            height: $arrowSize;
+
+            i {
+                border-radius: 50%;
+                width: 100%;
+                text-align: center;
+                font-size: $arrowFontSize;
+                line-height: $arrowSize;
+                cursor: pointer;
+                background-color: $arrowBackgroundColor;
+                color: $arrowTextColor;
+
+                &:hover {
+                    background-color: $arrowBackgroundColorHover;
+                    color: $arrowTextColorHover;
+                }
+            }
+        }
+    }
+
+    margin-bottom: 20px;
+}

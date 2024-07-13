@@ -8,9 +8,13 @@ function App() {
             style={{ maxWidth: 700, margin: '100px auto' }}
         >
             <DatePicker
+                onChange={(from, to) => {
+                    console.log('from:', from);
+                    console.log('to:', to);
+                }}
                 dual={true}
-                minRange={'2024-07-01'}
-                maxRange={'2025-07-01'}
+                minRange={'2024-01'}
+                maxRange={'2024-12'}
                 disallowExpired={true}
                 disallowFuture={false}
                 dayLabels={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}

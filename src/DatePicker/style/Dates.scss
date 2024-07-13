@@ -1,0 +1,154 @@
+$hoverBackgroundColor: #ececec;
+$selectedBackgroundColor: #202020;
+$selectedTextColor: #fff;
+$disabledDatesOpacity: 0.3;
+$fontSize: 14px;
+$fontColor: #202020;
+$fontTodayColor: #ff2424;
+
+@mixin disallowedStyle {
+    opacity: $disabledDatesOpacity;
+    cursor: not-allowed;
+}
+
+@mixin dateHoverStyle {
+    cursor: pointer;
+    background-color: $hoverBackgroundColor;
+    border-radius: 50%;
+}
+
+.ststr-datepicker-calendar-dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 2px;
+}
+
+.ststr-datepicker-calendar-date {
+    aspect-ratio: 1/1;
+    user-select: none;
+
+    &-inner {
+        aspect-ratio: inherit;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &-text {
+        color: $fontColor;
+        font-size: $fontSize;
+    }
+
+    &-between {
+        background-color: $hoverBackgroundColor;
+    }
+
+    &-selected {
+        cursor: pointer;
+        border-radius: 50%;
+        background-color: $selectedBackgroundColor;
+        position: relative;
+
+        &:after {
+            z-index: -1;
+            position: absolute;
+            top: 0;
+            left: 0;
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-color: $selectedBackgroundColor;
+            border-radius: 50%;
+        }
+
+        .ststr-datepicker-calendar-date-inner {
+            .ststr-datepicker-calendar-date-text {
+                color: $selectedTextColor;
+            }
+        }
+
+        &-start,
+        &-end {
+            position: relative;
+            z-index: 0;
+
+            &:before {
+                z-index: -1;
+                position: absolute;
+                top: 0;
+                left: 0;
+                content: '';
+                width: 100%;
+                height: 100%;
+                background-color: $hoverBackgroundColor;
+            }
+        }
+
+        &-start {
+            &:before {
+                border-top-left-radius: 50%;
+                border-bottom-left-radius: 50%;
+            }
+        }
+
+        &-end {
+            &:before {
+                border-top-right-radius: 50%;
+                border-bottom-right-radius: 50%;
+            }
+        }
+    }
+}
+
+.ststr-datepicker-disallow-expired {
+    .ststr-datepicker-calendar-date-expired {
+        @include disallowedStyle;
+    }
+}
+
+.ststr-datepicker-disallow-future {
+    .ststr-datepicker-calendar-date-future {
+        @include disallowedStyle;
+    }
+}
+
+.ststr-datepicker-calendar-date-today {
+    .ststr-datepicker-calendar-date-inner {
+        .ststr-datepicker-calendar-date-text {
+            color: $fontTodayColor;
+        }
+    }
+
+    &:not(.ststr-datepicker-calendar-date-selected):not(
+            .ststr-datepicker-calendar-date-between
+        ) {
+        &:hover {
+            @include dateHoverStyle;
+        }
+    }
+}
+
+.ststr-datepicker:not(.ststr-datepicker-disallow-expired) {
+    .ststr-datepicker-calendar-date-expired {
+        &:not(.ststr-datepicker-calendar-date-selected):not(
+                .ststr-datepicker-calendar-date-between
+            ) {
+            &:hover {
+                @include dateHoverStyle;
+            }
+        }
+    }
+}
+
+.ststr-datepicker:not(.ststr-datepicker-disallow-future) {
+    .ststr-datepicker-calendar-date-future {
+        &:not(.ststr-datepicker-calendar-date-selected):not(
+                .ststr-datepicker-calendar-date-between
+            ) {
+            &:hover {
+                @include dateHoverStyle;
+            }
+        }
+    }
+}

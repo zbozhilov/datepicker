@@ -1,18 +1,27 @@
 import React from 'react';
 import { DatePickerProps } from './DatePickerProps';
-import './DatePicker.scss';
+import './style/DatePicker.scss';
 import Calendar from './Calendar';
 import {
     getCurrentMonthDateString,
     getNextMonthDate,
     getPrevMonthDate,
+    isDateExpired,
+    isDateFuture,
+    sortDates,
 } from './helpers';
 
+import { useEffect, useState } from 'react';
+
 const DatePicker = (props: DatePickerProps) => {
-    
-    const [navDate, setNavDate] = React.useState<string>(
-        getCurrentMonthDateString()
-    );
+
+    const [navDate, setNavDate] = useState<string>(getCurrentMonthDateString({
+        min: props.minRange,
+        max: props.maxRange,
+    }));
+
+    const [date1, setDate1] = useState<string>(props.date1 || '');
+    const [date2, setDate2] = useState<string>(props.date2 || '');
 
     const getClassName = (): string => {
         const classNameArray = ['ststr-datepicker'];
@@ -27,6 +36,10 @@ const DatePicker = (props: DatePickerProps) => {
 
         if (props.disallowFuture) {
             classNameArray.push('ststr-datepicker-disallow-future');
+        }
+
+        if (props.className) {
+            classNameArray.push(props.className);
         }
 
         return classNameArray.join(' ');
@@ -44,10 +57,46 @@ const DatePicker = (props: DatePickerProps) => {
         });
     };
 
+    const handleDateSelect = (date: string) => {
+        const reset = () => {
+            setDate1('');
+            setDate2('');
+        };
+
+        if (props.disallowExpired) {
+            if (isDateExpired(date)) {
+                return;
+            }
+        }
+
+        if (props.disallowFuture) {
+            if (isDateFuture(date)) {
+                return;
+            }
+        }
+
+        if (!date1) {
+            setDate1(date);
+        } else {
+            if (date2) {
+                reset();
+
+                if (date !== date2) {
+                    setDate1(date);
+                }
+            } else {
+                if (date1 === date) {
+                    reset();
+                } else {
+                    setDate2(date);
+                }
+            }
+        }
+    };
+
     const getShouldDisablePrev = (): boolean => {
-        if (typeof props.minRange === 'string' && props.minRange.length > 0) {
-            const minRangeObject = new Date(props.minRange);
-            minRangeObject.setDate(1);
+        if (typeof props.minRange === 'string' && props.minRange.length === 7) {
+            const minRangeObject = new Date(`${props.minRange}-01`);
             minRangeObject.setHours(0, 0, 0, 0);
 
             const navObject = new Date(navDate);
@@ -61,9 +110,8 @@ const DatePicker = (props: DatePickerProps) => {
     };
 
     const getShouldDisableNext = (): boolean => {
-        if (typeof props.maxRange === 'string' && props.maxRange.length > 0) {
-            const maxRangeObject = new Date(props.maxRange);
-            maxRangeObject.setDate(1);
+        if (typeof props.maxRange === 'string' && props.maxRange.length === 7) {
+            const maxRangeObject = new Date(`${props.maxRange}-01`);
             maxRangeObject.setHours(0, 0, 0, 0);
 
             const navObject = new Date(navDate);
@@ -80,9 +128,43 @@ const DatePicker = (props: DatePickerProps) => {
         return false;
     };
 
+    /**
+     * * Update parent component when date1 or date2 changes
+     */
+    useEffect(() => {
+        if (date1 && date2) {
+            const { date1: from, date2: to } = sortDates(date1, date2);
+            props.onChange(from, to);
+        } else if (date1 || date2) {
+            const from = date1 || date2;
+            props.onChange(from, '');
+        } else {
+            props.onChange('', '');
+        }
+    }, [date1, date2, props]);
+
+    /**
+     * * Reset when minRange, maxRange, disallowExpired, or disallowFuture changes
+     */
+    useEffect(()=>{
+
+        setDate1('');
+        setDate2('');
+
+        const newDate = getCurrentMonthDateString({
+            min: props.minRange,
+            max: props.maxRange,
+        });
+
+        setNavDate(newDate);
+
+    }, [props.minRange, props.maxRange, props.disallowExpired, props.disallowFuture]);
+
     return (
         <div className={getClassName()}>
             <Calendar
+                date1={date1}
+                date2={date2}
                 dayLabels={props.dayLabels}
                 monthLabels={props.monthLabels}
                 date={navDate}
@@ -90,9 +172,12 @@ const DatePicker = (props: DatePickerProps) => {
                 nextButtonDisabled={props?.dual || getShouldDisableNext()}
                 onPrevClick={handlePrevClick}
                 onNextClick={handleNextClick}
+                onDateSelect={handleDateSelect}
             />
             {props.dual && (
                 <Calendar
+                    date1={date1}
+                    date2={date2}
                     dayLabels={props.dayLabels}
                     monthLabels={props.monthLabels}
                     date={getNextMonthDate(navDate)}
@@ -100,6 +185,7 @@ const DatePicker = (props: DatePickerProps) => {
                     nextButtonDisabled={getShouldDisableNext()}
                     onPrevClick={handlePrevClick}
                     onNextClick={handleNextClick}
+                    onDateSelect={handleDateSelect}
                 />
             )}
         </div>

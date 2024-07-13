@@ -1,0 +1,18 @@
+$fontSize: 12px;
+$fontColor: #202020;
+
+.ststr-datepicker-calendar-daylabels {
+    user-select: none;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0;
+    margin-bottom: 10px;
+
+    &-label {
+        text-align: center;
+        font-weight: 500;
+        font-size: $fontSize;
+        line-height: 1;
+        color: $fontColor;
+    }
+}

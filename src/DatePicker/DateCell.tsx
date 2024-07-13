@@ -1,7 +1,13 @@
 import React from 'react';
-import { isDateExpired, isDateFuture, isDateToday } from './helpers';
+import { isDateBetween, isDateExpired, isDateFuture, isDateToday, sortDates } from './helpers';
 
-const DateCell = (props: { date?: string; isEmpty?: boolean }) => {
+const DateCell = (props: {
+    date1?: string;
+    date2?: string;
+    date?: string;
+    isEmpty?: boolean;
+    onDateSelect?: (date: string) => void;
+}) => {
 
     const getClassName = (): string => {
 
@@ -12,6 +18,7 @@ const DateCell = (props: { date?: string; isEmpty?: boolean }) => {
         }
 
         if (!props.isEmpty) {
+
             if (props.date && isDateExpired(props.date)) {
                 classNameArray.push('ststr-datepicker-calendar-date-expired');
             }
@@ -23,6 +30,33 @@ const DateCell = (props: { date?: string; isEmpty?: boolean }) => {
             if (props.date && isDateToday(props.date)) {
                 classNameArray.push('ststr-datepicker-calendar-date-today');
             }
+
+            if (props.date && (props.date === props.date1 || props.date === props.date2)) {
+                classNameArray.push('ststr-datepicker-calendar-date-selected');
+
+                if (props.date1 && props.date2) {
+
+                    const sortedDates = sortDates(props.date1, props.date2);
+                    const { date1: minDate, date2: maxDate } = sortedDates;
+
+                    if (props.date === minDate) {
+                        classNameArray.push('ststr-datepicker-calendar-date-selected-start');
+                    }
+
+                    if (props.date === maxDate) {
+                        classNameArray.push('ststr-datepicker-calendar-date-selected-end');
+                    }
+
+                }
+
+            }
+
+            if (props.date && props.date1 && props.date2) {
+                if (isDateBetween(props.date1, props.date2, props.date)) {
+                    classNameArray.push('ststr-datepicker-calendar-date-between');
+                }
+            }
+
         }
 
         return classNameArray.join(' ');
@@ -31,7 +65,14 @@ const DateCell = (props: { date?: string; isEmpty?: boolean }) => {
     return (
         <div className={getClassName()}>
             {props.date && !props.isEmpty && (
-                <div className='ststr-datepicker-calendar-date-inner'>
+                <div
+                    className='ststr-datepicker-calendar-date-inner'
+                    onClick={() => {
+                        if (props.onDateSelect && props.date) {
+                            props.onDateSelect(props.date);
+                        }
+                    }}
+                >
                     <span className='ststr-datepicker-calendar-date-text'>
                         {props.date.split('-')[2]}
                     </span>

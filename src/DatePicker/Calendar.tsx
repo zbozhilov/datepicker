@@ -4,6 +4,8 @@ import DayLabels from './DayLabels';
 import Dates from './Dates';
 
 const Calendar = (props: {
+    date1: string;
+    date2: string;
     dayLabels: string[];
     monthLabels: string[];
     date: string;
@@ -12,6 +14,7 @@ const Calendar = (props: {
     disallowExpired?: boolean;
     onPrevClick: () => void;
     onNextClick: () => void;
+    onDateSelect: (date: string) => void;
 }) => {
     return (
         <div className='ststr-datepicker-calendar'>
@@ -26,7 +29,12 @@ const Calendar = (props: {
 
             <DayLabels dayLabels={props.dayLabels} />
 
-            <Dates date={props.date} />
+            <Dates
+                date={props.date}
+                onDateSelect={props.onDateSelect}
+                date1={props.date1}
+                date2={props.date2}
+            />
         </div>
     );
 };
