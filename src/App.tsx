@@ -2,36 +2,36 @@ import React from 'react';
 import DatePicker from './DatePicker/DatePicker';
 
 function App() {
+    const dayLabels = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    const monthLabels = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+
     return (
-        <div
-            className='App'
-            style={{ maxWidth: 700, margin: '100px auto' }}
-        >
+        <div className='demo-wrap'>
             <DatePicker
                 onChange={(from, to) => {
                     console.log('from:', from);
                     console.log('to:', to);
                 }}
                 dual={true}
-                minRange={'2024-01'}
-                maxRange={'2024-12'}
+                minRange={'2024-07'}
+                maxRange={'2026-01'}
                 disallowExpired={true}
                 disallowFuture={false}
-                dayLabels={['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']}
-                monthLabels={[
-                    'January',
-                    'February',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                    'August',
-                    'September',
-                    'October',
-                    'November',
-                    'December',
-                ]}
+                dayLabels={dayLabels}
+                monthLabels={monthLabels}
             />
         </div>
     );
